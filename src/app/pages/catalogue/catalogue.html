@@ -1,1 +1,16 @@
-<p>catalogue works!</p>
+<div class="flex gap-6">
+  <div class="bg-gray-200 w-1/4">
+    <div>1</div> <!-- search bar placeholders -->
+    <div></div>
+  </div>
+
+  <div class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4  w-3/4">
+    @for (item of products(); track item.id) {
+      <app-product-card [data]="item" />
+    } @empty {
+      <div class="col-span-full flex flex-col items-center py-20">
+        <p class="text-slate-500 italic">No hay productos que mostrar.</p>
+      </div>
+    }
+  </div>
+</div>

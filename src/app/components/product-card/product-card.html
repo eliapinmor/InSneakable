@@ -1,1 +1,24 @@
-<p>product-card works!</p>
+<div class=" flex flex-col overflow-hidden rounded-2xl border border-black/40 bg-white transition-all hover:shadow-xl">
+  <div class="aspect-square overflow-hidden bg-slate-100 h-64">
+    <img 
+      [src]="data().images[0]" 
+      [alt]="data().name"
+      class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105 bg-blue-100"
+    />
+  </div>
+
+  <div class="flex flex-1 flex-col p-4">
+    <div class="flex-1">
+      <p class="text-xs font-medium uppercase tracking-wider">
+        {{ data().categories?.name || 'Calzado' }}
+      </p>
+      <h3 class="mt-1 text-base font-bold line-clamp-1">
+        {{ data().name }}
+      </h3>
+
+      <span class="text-base">
+        {{ data().price}}€
+      </span>
+    </div>
+  </div>
+</div>
