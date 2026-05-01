@@ -15,4 +15,9 @@ export class Api {
   getProductById(id: number) {
     return this.http.get(`${this.apiUrl}/api/products/${id}`);
   }
+
+  getProductBySlug(slug: string) {
+    return this.http.get(`${this.apiUrl}/api/products/${slug}`);
+  }
+
 }

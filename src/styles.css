@@ -6,10 +6,10 @@
   --font-sans: 'Montserrat', sans-serif;
   --default-font-family: 'Montserrat', sans-serif;
 
-  --color-debug-bg: #f8fafc; 
+  --color-debug-bg: #f8fafc;
 }
 
-  
+
 @media (width >= 640px) {
   :root { --color-debug-bg: #c7dffd; }/* sm: azul */
 }
