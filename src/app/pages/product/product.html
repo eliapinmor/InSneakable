@@ -1,2 +1,25 @@
-<p>product works!</p>
-<p>{{ data().name }}</p>
+<div class="flex px-24 gap-4">
+  <div class="w-3/7 items-center flex justify-center">
+    <img [src]="data().images[0]">
+  </div>
+  <div class="w-4/7 flex flex-col gap-6">
+    <p class="text-5xl font-semibold">{{ data().name }}</p>
+    <p class="text-2xl font-regular">{{ data().description }}</p>
+    <p class="text-4xl font-semibold">{{ data().price }}€</p>
+    <p>Talla</p>
+    <div class="flex gap-4">
+    @for (size of data().sizes; track size) {
+      <app-size-button [data]="size"
+      [isSelected]="selectedSize() === size"
+    (click)="selectSize(size)"
+      >
+    </app-size-button>
+    } @empty {
+      <p class="text-sm text-gray-500">No hay tallas disponibles para este producto.</p>
+    }</div>
+     <div>
+      <!-- cantidad -->
+       <!-- añadir al carrito -->
+     </div>
+  </div>
+</div>

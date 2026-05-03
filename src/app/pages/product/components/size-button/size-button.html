@@ -1,0 +1,10 @@
+<button
+        class="flex h-10 w-10 items-center justify-center rounded-full border border-gray-300 px-3 text-sm font-medium transition-colors hover:border-black hover:bg-black hover:text-white"
+      [class.border-gray-300]="!isSelected()"
+        [class.border-black]="isSelected()"
+  [class.bg-black]="isSelected()"
+  [class.text-white]="isSelected()"
+
+        >
+        {{ data() }}
+</button>

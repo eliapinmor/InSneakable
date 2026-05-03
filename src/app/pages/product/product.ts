@@ -1,9 +1,10 @@
 import { Component, input, inject, signal, effect } from '@angular/core';
 import { Api } from '../../services/api';
+import { SizeButton } from './components/size-button/size-button';
 
 @Component({
   selector: 'app-product',
-  imports: [],
+  imports: [SizeButton],
   templateUrl: './product.html',
   styleUrl: './product.css',
 })
@@ -24,4 +25,12 @@ export class Product {
       });
     });
   }
+
+  selectedSize = signal<string | null>(null);
+
+  selectSize(size: string) {
+    this.selectedSize.set(size);
+  }
+
+  //funcion de añadir al carrito
 }
