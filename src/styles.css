@@ -10,24 +10,3 @@
 }
 
 
-@media (width >= 640px) {
-  :root { --color-debug-bg: #c7dffd; }/* sm: azul */
-}
-@media (width >= 768px) {
-  :root { --color-debug-bg: #c0fad1; } /* md: verde */
-}
-@media (width >= 1024px) {
-  :root { --color-debug-bg: #faf5bd; } /* lg: amarillo */
-}
-@media (width >= 1280px) {
-  :root { --color-debug-bg: #dcbcfc; } /* xl: morado */
-}
-@media (width >= 1536px) {
-  :root { --color-debug-bg: #fcc2c2; } /* 2xl: rojo */
-}
-
-/* Aplicamos la variable al body */
-body {
-  background-color: var(--color-debug-bg);
-  font-family: var(--font-sans);
-}
