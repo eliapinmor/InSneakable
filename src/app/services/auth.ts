@@ -8,26 +8,33 @@ import { BehaviorSubject, tap } from 'rxjs';
 export class Auth {
   private apiUrl = 'http://localhost:3000/api/auth';
 
-private userSubject = new BehaviorSubject<any>(null);
+  private userSubject = new BehaviorSubject<any>(null);
   user$ = this.userSubject.asObservable();
 
   constructor(private http: HttpClient) {
     const token = this.getToken();
-    if (token) {
-      this.getProfile().subscribe();
+
+    if (token && token !== 'undefined' && token !== 'null') {
+      this.getProfile().subscribe({
+        error: () => this.logout() // limpia token inválido
+      });
+    } else {
+      this.logout(); // limpia cualquier basura
     }
   }
 
-  register(data: { name: string; email: string; password: string }) {
+
+  register(data: { full_name: string; email: string; password: string }) {
     return this.http.post(`${this.apiUrl}/register`, data);
   }
 
   login(data: { email: string; password: string }) {
-    return this.http.post<{ token: string }>(`${this.apiUrl}/login`, data)
+    return this.http.post<any>(`${this.apiUrl}/login`, data)
       .pipe(
         tap(res => {
-          localStorage.setItem('token', res.token);
-          this.getProfile().subscribe();
+          localStorage.setItem('token', res.access_token);
+          this.userSubject.next(res.user);
+          // this.getProfile().subscribe();
         })
       );
   }

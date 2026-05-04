@@ -1,12 +1,41 @@
 <div class="flex bg-white/50 justify-around p-6 backdrop-blur-sm shadow-md">
-  <div>InSNEAKABLE</div>
-
-  <div class="flex gap-4 px-4">
-    <a routerLink="/" routerLinkActive="font-bold" [routerLinkActiveOptions]="{exact: true}">Home</a>
-    <a routerLink="/catalogue" routerLinkActive="font-bold">Catálogo</a>
-  </div>
 
   <div>
-    <button routerLink="/login">Login</button>
+    <a routerLink="/">InSNEAKABLE</a>
   </div>
+
+  <div class="flex gap-4 px-4">
+    <a routerLink="/" routerLinkActive="font-bold" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+    <a routerLink="/catalogue" routerLinkActive="font-bold">Catálogo</a>
+
+    <ng-container *ngIf="(user$ | async)?.role === 'user'">
+      <a routerLink="/orders">Mis pedidos</a>
+    </ng-container>
+
+    <ng-container *ngIf="(user$ | async)?.role === 'admin'">
+      <a routerLink="/admin/products">Admin · Productos</a>
+    </ng-container>
+        <ng-container *ngIf="(user$ | async)?.role === 'admin'">
+      <a routerLink="/admin/orders">Admin · Pedidos</a>
+    </ng-container>
+  </div>
+
+  <div class="flex gap-4 items-center">
+
+    <ng-container *ngIf="!(user$ | async)">
+      <button routerLink="/login">Login</button>
+    </ng-container>
+
+    <ng-container *ngIf="user$ | async as user">
+      <span>Hola, {{ user.full_name }}</span>
+
+      <ng-container *ngIf="user.role === 'user'">
+        <a routerLink="/cart">Carrito</a>
+      </ng-container>
+
+      <button (click)="logout()">Cerrar sesión</button>
+    </ng-container>
+
+  </div>
+
 </div>

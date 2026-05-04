@@ -1,1 +1,35 @@
-<p>register works!</p>
+<div class="flex flex-col items-start gap-6 m-auto mt-12 w-1/4">
+  <h1 class="text-2xl font-bold">Bienvenido a InSNEAKABLE</h1>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()"
+    class="flex flex-col gap-4 w-full border border-gray-300 rounded-md p-6">
+    <div>
+      <label class="text-sm font-medium text-gray-700">Nombre Completo</label>
+      <input type="text" placeholder="Nombre Completo" formControlName="full_name"
+        class="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+    </div>
+    <div>
+      <label class="text-sm font-medium text-gray-700">Correo electrónico</label>
+      <input type="email" placeholder="Correo electrónico" formControlName="email"
+        class="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+    </div>
+    <div>
+      <label class="text-sm font-medium text-gray-700">Contraseña</label>
+
+      <input type="password" placeholder="Contraseña" formControlName="password"
+        class="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+    </div>
+    <div>
+      <label class="text-sm font-medium text-gray-700">Contraseña</label>
+
+      <input type="password" placeholder="Contraseña" formControlName="confirm_password"
+        class="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+    </div> 
+    <button type="submit" class="w-full rounded-md bg-black text-white px-4 py-2 hover:bg-black/50 transition-colors">
+      Continuar
+    </button>
+  </form>
+  <p class="text-sm text-gray-500 text-center">
+    ¿Ya tienes una cuenta?
+    <a routerLink="/login" class="text-blue-500 hover:underline">Inicia sesión aquí</a>
+  </p>
+</div>
