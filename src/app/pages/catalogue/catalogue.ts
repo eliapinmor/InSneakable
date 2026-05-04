@@ -9,13 +9,11 @@ import { ProductCard } from '../../components/product-card/product-card';
   styleUrl: './catalogue.css',
 })
 export class Catalogue implements OnInit {
-  // Define como signal con un valor inicial de array vacío
-  products = signal<any[]>([]); 
-private apiService = inject(Api);
+  products = signal<any[]>([]);
+  private apiService = inject(Api);
   ngOnInit() {
     this.apiService.getProducts().subscribe((res: any) => {
       if (res && res.data) {
-        // Para actualizar un signal se usa .set()
         this.products.set(res.data);
       }
     });
