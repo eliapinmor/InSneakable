@@ -1,0 +1,49 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div>
+    <label>Imagen</label>
+    <input class="input" type="file" (change)="onFileSelected($event)" />
+    <!-- preview de imagenes -->
+    <div class="flex gap-2 mt-2">
+      @for (img of previewImages(); track img) {
+        <img [src]="img" class="h-16 w-16 object-cover rounded" />
+      }
+    </div>
+  </div>
+  <div>
+    <label>Nombre</label>
+    <input type="text" formControlName="name" class="input" />
+  </div>
+  <div>
+    <label>Descripción</label>
+    <textarea formControlName="description" class="input"></textarea>
+  </div>
+  <div>
+    <label>Marca</label>
+    <input formControlName="brand" class="input" />
+  </div>
+
+  <div>
+    <label>Categoría</label>
+    <select formControlName="category_id" class="input">
+      <option value="">Selecciona una categoría</option>
+
+      @for (cat of categories(); track cat.id) {
+        <option [value]="cat.id">{{ cat.name }}</option>
+      }
+    </select>
+  </div>
+
+  <div>
+    <label>Precio</label>
+    <input type="number" formControlName="price" class="input" />
+  </div>
+  <div>
+    <label>Stock</label>
+    <input type="number" formControlName="stock" class="input" />
+  </div>
+  <div>
+    <label>Tallas (separadas por coma)</label>
+    <input formControlName="sizes" class="input" />
+  </div>
+  <button type="submit">Guardar</button>
+</form>

@@ -1,0 +1,32 @@
+<div
+  class="fixed inset-0 bg-black/40"
+  *ngIf="open()"
+  (click)="close.emit()"
+></div>
+
+<div
+  class="fixed right-0 top-0 z-100 h-full w-96 bg-white shadow-xl p-6 transition-transform"
+  [class.translate-x-full]="!open()"
+>
+  <h2 class="text-xl font-bold mb-4">
+    @if (mode() === 'edit') {
+      Editar producto
+    } @else {
+      Crear producto
+    }
+  </h2>
+
+<app-product-form
+    [product]="product()"
+    [mode]="mode()"
+    [categories]="categories()"
+    (save)="handleSubmit($event)"
+  ></app-product-form>
+
+  <button
+    class="mt-4 px-4 py-2 bg-black text-white rounded"
+    (click)="close.emit()"
+  >
+    Cerrar
+  </button>
+</div>

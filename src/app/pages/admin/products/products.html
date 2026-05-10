@@ -1,0 +1,22 @@
+<div>
+  <div class="flex items-center justify-between mb-6">
+    <h1>Gestión de productos</h1>
+    <button (click)="openCreateSlideover()">
+      CREAR PRODUCTO
+    </button>
+  </div>
+  <app-product-table
+    [products]="products()"
+    (edit)="openEditSlideover($event)"
+    (delte)="confirmDelete($event)"
+  ></app-product-table>
+
+  <app-product-slideover
+    [open]="isSlideoverOpen()"
+    [product]="selectedProduct()"
+    [mode]="slideoverMode()"
+    [categories]="categories()"
+    (close)="isSlideoverOpen.set(false)"
+    (refresh)="loadProducts()"
+  ></app-product-slideover>
+</div>

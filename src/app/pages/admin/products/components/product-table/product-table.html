@@ -1,0 +1,29 @@
+<table class="min-w-full border-collapse border border-slate-300">
+  <thead class="bg-slate-100 text-left text-sm font-semibold text-slate-700">
+    <tr>
+      <th class="p-3">Producto</th>
+      <th class="p-3">Categoría</th>
+      <th class="p-3">Precio</th>
+      <th class="p-3">Stock</th>
+      <th class="p-3">Estado</th>
+      <th class="p-3">Acciones</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    @for (product of products(); track product.id) {
+      <tr
+        app-product-row
+        [product]="product"
+        (edit)="onEdit($event)"
+        (delete)="onDelete($event)"
+      ></tr>
+    } @empty {
+      <tr>
+        <td colspan="6" class="text-center py-4 text-slate-500 italic">
+          No hay productos que mostrar.
+        </td>
+      </tr>
+    }
+  </tbody>
+</table>

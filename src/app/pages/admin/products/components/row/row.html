@@ -1,0 +1,26 @@
+
+  <td class="p-3">
+    <div class="flex items-center gap-3">
+      <img [src]="product().images[0]" alt="{{ product().name }}" class="h-16 w-16 object-cover rounded-md" />
+      <span class="font-medium">{{ product().name }}</span>
+    </div>
+  </td>
+  <td class="p-3">{{ product().categories?.name || 'Sin categoría' }}</td>
+  <td class="p-3">{{ product().price | number:'1.2-2' }} €</td>
+  <td class="p-3">{{ product().stock ?? '—' }}</td>
+  <td class="p-3">
+    <span
+      class="px-2 py-1 rounded-full text-xs font-semibold"
+      [class.bg-green-100]="product().status === 'activo'"
+      [class.text-green-700]="product().status === 'activo'"
+      [class.bg-red-100]="product().status !== 'activo'"
+      [class.text-red-700]="product().status !== 'activo'"
+    >
+      {{ product().status || 'Inactivo' }}
+    </span>
+  </td>
+  <td class="p-3">
+    <button class="text-blue-600 hover:underline" (click)="edit.emit(product())">Editar</button>
+    <button class="text-red-600 hover:underline ml-2" (click)="delete.emit(product())">Eliminar</button>
+  </td>
+
