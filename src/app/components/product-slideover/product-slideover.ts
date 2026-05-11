@@ -1,7 +1,7 @@
 import { Component, input, output, inject } from '@angular/core';
 import { ProductForm } from '../product-form/product-form';
 import { CommonModule } from '@angular/common';
-import { Api } from '../../services/api';
+import { ProductsService } from '../../services/products.service';
 
 @Component({
   selector: 'app-product-slideover',
@@ -19,7 +19,7 @@ export class ProductSlideover {
   close = output<void>();
   refresh = output<void>();
 
-  private apiService = inject(Api);
+  private productsService = inject(ProductsService);
 
   handleSubmit(formData: any) {
     console.log('Producto guardado en el slideover:', formData);
@@ -29,12 +29,12 @@ export class ProductSlideover {
     }
 
     if (this.mode() === 'create') {
-      this.apiService.createProduct(formData).subscribe(() => {
+      this.productsService.createProduct(formData).subscribe(() => {
         this.close.emit();
         this.refresh.emit();
       });
     } else {
-      this.apiService.updateProduct(this.product().id, formData).subscribe(() => {
+      this.productsService.updateProduct(this.product().id, formData).subscribe(() => {
         this.close.emit();
         this.refresh.emit();
       });

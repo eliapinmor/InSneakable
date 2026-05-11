@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { Api } from '../../services/api';
 import { ProductCard } from '../../components/product-card/product-card';
+import { ProductsService } from '../../services/products.service';
 
 @Component({
   selector: 'app-catalogue',
@@ -10,9 +10,9 @@ import { ProductCard } from '../../components/product-card/product-card';
 })
 export class Catalogue implements OnInit {
   products = signal<any[]>([]);
-  private apiService = inject(Api);
+  private productsService = inject(ProductsService);
   ngOnInit() {
-    this.apiService.getProducts().subscribe((res: any) => {
+    this.productsService.getProducts().subscribe((res: any) => {
       if (res && res.data) {
         this.products.set(res.data);
       }

@@ -30,6 +30,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/admin/orders/orders').then(m => m.Orders)
   },
   {
+    path: 'cart',
+    loadComponent: () => import('./pages/cart/cart').then(m => m.Cart)
+  },
+  {
     path: '**',
     redirectTo: ''
   }

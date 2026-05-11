@@ -1,7 +1,8 @@
 import { Component, inject, signal } from '@angular/core';
-import { Api } from '../../../services/api';
 import { ProductTable } from './components/product-table/product-table';
 import { ProductSlideover } from '../../../components/product-slideover/product-slideover';
+import { ProductsService } from '../../../services/products.service';
+import { CategoriesService } from '../../../services/categories.service';
 
 @Component({
   selector: 'app-products',
@@ -17,20 +18,22 @@ export class Products {
   slideoverMode = signal<'create' | 'edit'>('edit');
   categories = signal<any[]>([]);
 
-  private apiService = inject(Api);
+  private productsService = inject(ProductsService);
+  private categoriesService = inject(CategoriesService);
+
   ngOnInit() {
-    this.apiService.getProducts().subscribe((res: any) => {
+    this.productsService.getProducts().subscribe((res: any) => {
       if (res?.data) {
         this.products.set(res.data);
       }
     });
-    this.apiService.getCategories().subscribe((res: any) => {
+    this.categoriesService.getCategories().subscribe((res: any) => {
       this.categories.set(res);
     });
   }
   loadProducts() {
     // Cargar productos
-    this.apiService.getProducts().subscribe({
+    this.productsService.getProducts().subscribe({
       next: (res: any) => {
         if (res?.data) this.products.set(res.data);
         else if (Array.isArray(res)) this.products.set(res);
@@ -39,7 +42,7 @@ export class Products {
     });
 
     // Cargar categorías
-    this.apiService.getCategories().subscribe({
+    this.categoriesService.getCategories().subscribe({
       next: (res: any) => {
         // tu backend devuelve array directamente
         this.categories.set(Array.isArray(res) ? res : (res?.data ?? []));

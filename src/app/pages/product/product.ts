@@ -1,6 +1,6 @@
 import { Component, input, inject, signal, effect } from '@angular/core';
-import { Api } from '../../services/api';
 import { SizeButton } from './components/size-button/size-button';
+import { ProductsService } from '../../services/products.service';
 
 @Component({
   selector: 'app-product',
@@ -9,7 +9,7 @@ import { SizeButton } from './components/size-button/size-button';
   styleUrl: './product.css',
 })
 export class Product {
-  private api = inject(Api);
+  private productsService = inject(ProductsService);
 
   slug = input.required<string>();
 
@@ -17,7 +17,7 @@ export class Product {
 
   constructor() {
     effect(() => {
-      this.api.getProductBySlug(this.slug()).subscribe({
+      this.productsService.getProductBySlug(this.slug()).subscribe({
         next: (res: any) => {
           this.data.set(res);
         },

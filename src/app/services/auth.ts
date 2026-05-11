@@ -15,39 +15,41 @@ export class Auth {
     const token = this.getToken();
 
     if (token && token !== 'undefined' && token !== 'null') {
+      this.userSubject.next({ loading: true });
       this.getProfile().subscribe({
-        error: () => this.logout() // limpia token inválido
+        next: (user) => {
+          // Todo ok, el userSubject ya tiene los datos reales
+        },
+        error: () => {
+          console.error('Token expirado o inválido');
+          this.logout();
+        },
       });
-    } else {
-      this.logout(); // limpia cualquier basura
     }
   }
-
 
   register(data: { full_name: string; email: string; password: string }) {
     return this.http.post(`${this.apiUrl}/register`, data);
   }
 
   login(data: { email: string; password: string }) {
-    return this.http.post<any>(`${this.apiUrl}/login`, data)
-      .pipe(
-        tap(res => {
-          localStorage.setItem('token', res.access_token);
-          this.userSubject.next(res.user);
-          // this.getProfile().subscribe();
-        })
-      );
+    return this.http.post<any>(`${this.apiUrl}/login`, data).pipe(
+      tap((res) => {
+        localStorage.setItem('token', res.access_token);
+        this.userSubject.next(res.user);
+        // this.getProfile().subscribe();
+      }),
+    );
   }
 
   getProfile() {
     const headers = new HttpHeaders({
-      Authorization: `Bearer ${this.getToken()}`
+      Authorization: `Bearer ${this.getToken()}`,
     });
 
-    return this.http.get(`${this.apiUrl}/profile`, { headers })
-      .pipe(
-        tap(user => this.userSubject.next(user))
-      );
+    return this.http
+      .get(`${this.apiUrl}/profile`, { headers })
+      .pipe(tap((user) => this.userSubject.next(user)));
   }
 
   logout() {

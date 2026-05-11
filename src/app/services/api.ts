@@ -12,10 +12,6 @@ export class Api {
     return this.http.get(`${this.apiUrl}/api/products`);
   }
 
-  getProductById(id: number) {
-    return this.http.get(`${this.apiUrl}/api/products/${id}`);
-  }
-
   getProductBySlug(slug: string) {
     return this.http.get(`${this.apiUrl}/api/products/${slug}`);
   }
@@ -28,8 +24,8 @@ export class Api {
     return this.http.post(`${this.apiUrl}/api/products`, formData);
   }
 
-  updateProduct(id: string, payload: any) {
-    return this.http.put(`${this.apiUrl}/api/products/${id}`, payload);
+  updateProduct(id: string, formData: FormData) {
+    return this.http.put(`${this.apiUrl}/api/products/${id}`, formData);
   }
 
   getToken() {
