@@ -14,44 +14,11 @@
       </thead>
       <tbody>
         @for (order of orders(); track order.id) {
-          <tr class="hover:bg-gray-50 transition-colors border-b last:border-0">
-            <td class="p-4">
-              <p class="font-mono text-xs font-bold">#{{ order.id.split('-')[0] }}</p>
-              <p class="text-xs text-gray-500">{{ order.created_at | date:'short' }}</p>
-            </td>
-
-            <td class="p-4 text-sm">
-              {{ order.user_id.split('-')[0] }}...
-            </td>
-
-            <td class="p-4">
-              <div class="text-xs space-y-1">
-                @for (item of order.order_items; track item.id) {
-                  <p>• {{ item.products.name }} (x{{ item.quantity }})</p>
-                }
-              </div>
-            </td>
-
-            <td class="p-4 font-bold">
-              {{ order.total_amount }}€
-            </td>
-
-            <td class="p-4">
-              <select 
-                [ngModel]="order.status" 
-                (ngModelChange)="changeStatus(order.id, $event)"
-                class="text-xs font-bold p-2 rounded-lg border bg-white focus:ring-2 focus:ring-black outline-none transition-all"
-                [class.bg-yellow-50]="order.status === 'pending'"
-                [class.bg-blue-50]="order.status === 'confirmed'"
-                [class.bg-green-50]="order.status === 'delivered'"
-                [class.bg-red-50]="order.status === 'cancelled'"
-              >
-                @for (status of statusOptions; track status) {
-                  <option [value]="status">{{ status | titlecase }}</option>
-                }
-              </select>
-            </td>
-          </tr>
+          <app-order-row
+            [order]="order"
+            [statusOptions]="statusOptions"
+            (statusChange)="changeStatus($event.orderId, $event.status)"
+          />
         } @empty {
           <tr>
             <td colspan="5" class="p-10 text-center text-gray-500 italic">

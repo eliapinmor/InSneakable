@@ -9,14 +9,14 @@
     <a routerLink="/catalogue" routerLinkActive="font-bold">Catálogo</a>
 
     <ng-container *ngIf="(user$ | async)?.role === 'user'">
-      <a routerLink="/orders">Mis pedidos</a>
+      <a routerLink="/orders" routerLinkActive="font-bold">Mis pedidos</a>
     </ng-container>
 
     <ng-container *ngIf="(user$ | async)?.role === 'admin'">
-      <a routerLink="/admin/products">Admin · Productos</a>
+      <a routerLink="/admin/products" routerLinkActive="font-bold">Admin · Productos</a>
     </ng-container>
         <ng-container *ngIf="(user$ | async)?.role === 'admin'">
-      <a routerLink="/admin/orders">Admin · Pedidos</a>
+      <a routerLink="/admin/orders" routerLinkActive="font-bold">Admin · Pedidos</a>
     </ng-container>
   </div>
 
@@ -27,10 +27,10 @@
     </ng-container>
 
     <ng-container *ngIf="user$ | async as user">
-      <span>Hola, {{ user.full_name }}</span>
+      <!-- <span>Hola, {{ user.full_name }}</span> -->
 
       <ng-container *ngIf="user.role === 'user'">
-        <a routerLink="/cart">Carrito</a>
+        <a routerLink="/cart" routerLinkActive="font-bold">Carrito</a>
       </ng-container>
 
       <button (click)="logout()">Cerrar sesión</button>
