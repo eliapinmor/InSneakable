@@ -60,8 +60,25 @@ export class Products {
     this.slideoverMode.set('create');
   }
 
-  confirmDelete(product: any) {
-    console.log('Eliminar producto:', product);
-    // aquí luego añadimos el modal de confirmación
+// En products.ts
+
+confirmDelete(product: any) {
+  // 1. Pedimos confirmación al usuario
+  const ok = confirm(`¿Estás seguro de que quieres eliminar "${product.name}"?`);
+  
+  if (ok) {
+    // 2. Llamamos al servicio usando el ID (UUID)
+    this.productsService.deleteProduct(product.id).subscribe({
+      next: () => {
+        // 3. Si sale bien, mostramos aviso y refrescamos la lista
+        alert('Producto eliminado correctamente');
+        this.loadProducts(); 
+      },
+      error: (err) => {
+        console.error('Error al eliminar:', err);
+        alert('Hubo un error al intentar eliminar el producto.');
+      }
+    });
   }
+}
 }
