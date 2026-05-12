@@ -2,27 +2,27 @@ export interface Category {
   id: string;
   name: string;
   slug: string;
-  description: string;
-  image_url: string;
+  description: string | null;
+  created_at: string;
 }
-
+ 
 export interface Product {
   id: string;
-  name: string;
-  price: number;
   category_id: string;
-  description: string;
-  stock: number;
-  brand: string;
-  sizes: string[];
-  images: string[];
+  name: string;
   slug: string;
+  description: string | null;
+  price: number;
+  stock: number;
+  image_url: string | null;
+  brand: string | null;
+  sizes: string[];
   is_active: boolean;
   created_at: string;
-  categories?: Category;
+  updated_at: string;
 }
+ 
 
-export interface ProductResponse {
-  data: Product[];
-  count: number;
+export interface ProductResponse extends Product {
+  category: Category | null;
 }

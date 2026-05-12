@@ -23,11 +23,6 @@ export class ProductSlideover {
 
   handleSubmit(formData: any) {
     console.log('Producto guardado en el slideover:', formData);
-    // en handleSubmit antes de enviar
-    for (const pair of formData.entries()) {
-      console.log(pair[0], pair[1]);
-    }
-
     if (this.mode() === 'create') {
       this.productsService.createProduct(formData).subscribe(() => {
         this.close.emit();
@@ -40,4 +35,5 @@ export class ProductSlideover {
       });
     }
   }
+
 }

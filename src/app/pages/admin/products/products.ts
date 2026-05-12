@@ -32,7 +32,6 @@ export class Products {
     });
   }
   loadProducts() {
-    // Cargar productos
     this.productsService.getProducts().subscribe({
       next: (res: any) => {
         if (res?.data) this.products.set(res.data);
@@ -41,10 +40,8 @@ export class Products {
       error: (err) => console.error('Error cargando productos', err),
     });
 
-    // Cargar categorías
     this.categoriesService.getCategories().subscribe({
       next: (res: any) => {
-        // tu backend devuelve array directamente
         this.categories.set(Array.isArray(res) ? res : (res?.data ?? []));
       },
       error: (err) => console.error('Error cargando categorías', err),

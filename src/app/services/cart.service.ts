@@ -1,36 +1,47 @@
 import { Injectable, signal } from '@angular/core';
 import { CartItem } from '../interfaces/cart.interface';
+import { Product } from '../interfaces/product.interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CartService {
-  items = signal<CartItem[]>([]);
+  public cartItems = signal<CartItem[]>(this.loadCart());
 
-  private cartItems = signal<CartItem[]>(this.loadCart());
-
-  addToCart(product: any, size: string) {
+  addToCart(product: Product, size: string): void {
     const currentItems = this.cartItems();
     const existingItem = currentItems.find(
-      (item) => item.productId === product.id && item.size === size,
+      (item) => item.product.id === product.id && item.size === size
     );
 
     if (existingItem) {
       existingItem.quantity += 1;
+      existingItem.subtotal = existingItem.quantity * existingItem.unit_price;
       this.cartItems.set([...currentItems]);
     } else {
-      // Si es nuevo, lo añadimos
       const newItem: CartItem = {
-        productId: product.id,
-        name: product.name,
-        price: product.price,
-        images: product.images[0],
+        product: product,
         size: size,
         quantity: 1,
+        unit_price: product.price,
+        subtotal: product.price,
       };
       this.cartItems.set([...currentItems, newItem]);
     }
     this.saveToLocalStorage();
+  }
+
+  public removeFromCart(productId: string, size: string): void {
+    const updatedItems = this.cartItems().filter(
+      (item) => !(item.product.id === productId && item.size === size)
+    );
+    this.cartItems.set(updatedItems);
+    this.saveToLocalStorage();
+  }
+
+  public clearCart(): void {
+    this.cartItems.set([]);
+    localStorage.removeItem('cart');
   }
 
   private loadCart(): CartItem[] {
@@ -38,21 +49,7 @@ export class CartService {
     return storedCart ? JSON.parse(storedCart) : [];
   }
 
-  private saveToLocalStorage() {
+  private saveToLocalStorage(): void {
     localStorage.setItem('cart', JSON.stringify(this.cartItems()));
-  }
-
-  private removeFromCart(productId: string, size: string) {
-    const currentItems = this.cartItems();
-    const updatedItems = currentItems.filter(
-      (item) => !(item.productId === productId && item.size === size),
-    );
-    this.cartItems.set(updatedItems);
-    this.saveToLocalStorage();
-  }
-
-  private clearCart() {
-    this.cartItems.set([]);
-    localStorage.removeItem('cart');
   }
 }

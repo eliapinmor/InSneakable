@@ -21,6 +21,7 @@ export class ProductTable {
   }
 
   onDelete(product: any) {
+    console.log('1delete')
     this.delete.emit(product);
   }
 }

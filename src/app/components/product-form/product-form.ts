@@ -76,7 +76,6 @@ export class ProductForm {
     const raw = this.form.value;
     const formData = new FormData();
 
-    // 1. Campos obligatorios como strings
     formData.append('name', raw.name);
     formData.append('description', raw.description || '');
     formData.append('brand', raw.brand || '');
@@ -84,12 +83,8 @@ export class ProductForm {
     formData.append('price', String(raw.price));
     formData.append('stock', String(raw.stock));
 
-    // 2. EL CAMBIO CLAVE PARA EL ERROR DE COALESCE:
-    // Enviamos siempre is_active como string 'true'
     formData.append('is_active', 'true');
 
-    // 3. LAS TALLAS:
-    // El backend hace JSON.parse(), así que DEBE ser un string JSON ["a","b"]
     const sizesValue = raw.sizes ? String(raw.sizes).trim() : '';
     let sizesArray: string[] = [];
 
@@ -100,7 +95,6 @@ export class ProductForm {
         .filter(Boolean);
     }
 
-    // Enviamos el string JSON. Ejemplo: '["38","40"]'
     formData.append('sizes', JSON.stringify(sizesArray));
 
     if (this.selectedFile) {
@@ -116,7 +110,6 @@ export class ProductForm {
 
     this.selectedFile = file;
 
-    // preview
     const reader = new FileReader();
     reader.onload = () => this.previewImages.set([reader.result as string]);
     reader.readAsDataURL(file);
