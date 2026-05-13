@@ -1,34 +1,80 @@
 <div class="flex flex-col items-start gap-6 m-auto mt-12 w-1/4">
   <h1 class="text-2xl font-bold">Bienvenido a InSNEAKABLE</h1>
+
   <form [formGroup]="form" (ngSubmit)="onSubmit()"
     class="flex flex-col gap-4 w-full border border-gray-300 rounded-md p-6">
-    <div>
-      <label class="text-sm font-medium text-gray-700">Nombre Completo</label>
-      <input type="text" placeholder="Nombre Completo" formControlName="full_name"
-        class="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+    <div class="flex flex-col gap-1">
+      <label class="text-sm font-medium text-gray-700">Nombre completo</label>
+      <input type="text" placeholder="Nombre completo" formControlName="full_name"
+        class="w-full rounded-md border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+        [class.border-red-400]="f['full_name'].invalid && f['full_name'].touched"
+        [class.border-gray-300]="!(f['full_name'].invalid && f['full_name'].touched)" />
+      @if (f['full_name'].touched) {
+      @if (f['full_name'].hasError('required')) {
+      <p class="text-xs text-red-500">El nombre completo es obligatorio.</p>
+      } @else if (f['full_name'].hasError('minlength')) {
+      <p class="text-xs text-red-500">El nombre debe tener al menos 3 caracteres.</p>
+      }
+      }
     </div>
-    <div>
+    <div class="flex flex-col gap-1">
       <label class="text-sm font-medium text-gray-700">Correo electrónico</label>
       <input type="email" placeholder="Correo electrónico" formControlName="email"
-        class="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        class="w-full rounded-md border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+        [class.border-red-400]="f['email'].invalid && f['email'].touched"
+        [class.border-gray-300]="!(f['email'].invalid && f['email'].touched)" />
+      @if (f['email'].touched) {
+      @if (f['email'].hasError('required')) {
+      <p class="text-xs text-red-500">El correo electrónico es obligatorio.</p>
+      } @else if (f['email'].hasError('email')) {
+      <p class="text-xs text-red-500">Introduce un correo electrónico válido.</p>
+      }
+      }
     </div>
-    <div>
-      <label class="text-sm font-medium text-gray-700">Contraseña</label>
 
+    <div class="flex flex-col gap-1">
+      <label class="text-sm font-medium text-gray-700">Contraseña</label>
       <input type="password" placeholder="Contraseña" formControlName="password"
-        class="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        class="w-full rounded-md border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+        [class.border-red-400]="f['password'].invalid && f['password'].touched"
+        [class.border-gray-300]="!(f['password'].invalid && f['password'].touched)" />
+      @if (f['password'].touched) {
+      @if (f['password'].hasError('required')) {
+      <p class="text-xs text-red-500">La contraseña es obligatoria.</p>
+      } @else if (f['password'].hasError('minlength')) {
+      <p class="text-xs text-red-500">La contraseña debe tener al menos 6 caracteres.</p>
+      }
+      }
     </div>
-    <div>
-      <label class="text-sm font-medium text-gray-700">Contraseña</label>
 
-      <input type="password" placeholder="Contraseña" formControlName="confirm_password"
-        class="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-    </div> 
-    <button type="submit" class="w-full rounded-md bg-black text-white px-4 py-2 hover:bg-black/50 transition-colors">
+    <div class="flex flex-col gap-1">
+      <label class="text-sm font-medium text-gray-700">Confirmar contraseña</label>
+      <input type="password" placeholder="Confirmar contraseña" formControlName="confirm_password"
+        class="w-full rounded-md border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+        [class.border-red-400]="(f['confirm_password'].touched && form.hasError('passwordMismatch'))"
+        [class.border-gray-300]="!(f['confirm_password'].touched && form.hasError('passwordMismatch'))" />
+      @if (f['confirm_password'].touched) {
+      @if (f['confirm_password'].hasError('required')) {
+      <p class="text-xs text-red-500">Debes confirmar la contraseña.</p>
+      } @else if (form.hasError('passwordMismatch')) {
+      <p class="text-xs text-red-500">Las contraseñas no coinciden.</p>
+      }
+      }
+    </div>
+
+    @if (serverError) {
+    <p class="text-sm text-red-600 bg-red-50 border border-red-200 rounded-md px-3 py-2">
+      {{ serverError }}
+    </p>
+    }
+
+    <button type="submit"
+      class="w-full rounded-md bg-black text-white px-4 py-2 hover:bg-black/50 transition-colors disabled:opacity-50">
       Continuar
     </button>
   </form>
-  <p class="text-sm text-gray-500 text-center">
+
+  <p class="text-sm text-gray-500 text-center w-full">
     ¿Ya tienes una cuenta?
     <a routerLink="/login" class="text-blue-500 hover:underline">Inicia sesión aquí</a>
   </p>

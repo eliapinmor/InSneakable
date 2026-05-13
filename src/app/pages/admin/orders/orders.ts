@@ -1,13 +1,12 @@
 import { Component, inject, signal } from '@angular/core';
 import { OrdersService } from '../../../services/orders.service';
-import { DatePipe, TitleCasePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { OrderRow } from './components/order-row/order-row';
 
 @Component({
   selector: 'app-admin-orders',
   standalone: true,
-  imports: [DatePipe, FormsModule, TitleCasePipe, OrderRow],
+  imports: [FormsModule, OrderRow],
   templateUrl: './orders.html',
   styleUrl: './orders.css',
 })

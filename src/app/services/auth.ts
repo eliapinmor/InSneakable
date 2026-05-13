@@ -17,9 +17,7 @@ export class Auth {
     if (token && token !== 'undefined' && token !== 'null') {
       this.userSubject.next({ loading: true });
       this.getProfile().subscribe({
-        next: (user) => {
-          // Todo ok, el userSubject ya tiene los datos reales
-        },
+        next: () => {},
         error: () => {
           console.error('Token expirado o inválido');
           this.logout();
@@ -37,7 +35,6 @@ export class Auth {
       tap((res) => {
         localStorage.setItem('token', res.access_token);
         this.userSubject.next(res.user);
-        // this.getProfile().subscribe();
       }),
     );
   }
@@ -57,11 +54,37 @@ export class Auth {
     this.userSubject.next(null);
   }
 
-  getToken() {
+  getToken(): string | null {
     return localStorage.getItem('token');
   }
 
-  isLoggedIn() {
-    return !!this.getToken();
+  isLoggedIn(): boolean {
+    const token = this.getToken();
+    return !!token && token !== 'undefined' && token !== 'null';
+  }
+
+  getRole(): string | null {
+    const user = this.userSubject.getValue();
+    if (!user || user.loading) return null;
+    return user.role ?? user.user_metadata?.role ?? null;
+  }
+
+   waitForUser(): Promise<any> {
+    return new Promise((resolve) => {
+      const current = this.userSubject.getValue();
+      if (current && !current.loading) {
+        resolve(current);
+        return;
+      }
+      const sub = this.user$.subscribe((user) => {
+        if (user && !user?.loading) {
+          sub.unsubscribe();
+          resolve(user);
+        } else if (!user) {
+          sub.unsubscribe();
+          resolve(null);
+        }
+      });
+    });
   }
 }

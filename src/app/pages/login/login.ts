@@ -10,7 +10,8 @@ import { Router, RouterLink } from '@angular/router';
   styleUrl: './login.css',
 })
 export class Login implements OnInit {
-  form: any;
+  form!: FormGroup;
+  serverError = '';
 
   constructor(
     private fb: FormBuilder,
@@ -21,16 +22,24 @@ export class Login implements OnInit {
   ngOnInit() {
     this.form = this.fb.nonNullable.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
+      password: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
+  get f() {
+    return this.form.controls;
+  }
   onSubmit() {
-    console.log('formulario enviado');
-    if (this.form.invalid) return;
-    console.log('formulario valido')
+    this.serverError = '';
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
     this.auth.login(this.form.getRawValue()).subscribe({
       next: () => this.router.navigate(['/']),
-      error: (err) => console.error(err),
+      error: (err) => {
+        this.serverError = err.error?.message || 'Credenciales incorrectas. Inténtalo de nuevo.';
+      },
     });
   }
 }

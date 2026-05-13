@@ -4,16 +4,14 @@ import { Auth } from '../services/auth';
 
 // ============================================================
 // authGuard
-// Protege rutas privadas (usuario debe estar autenticado)
-// Uso: canActivate: [authGuard]
+// Protege rutas privadas — el usuario debe estar autenticado
+// Si no hay token válido → redirige a /login
 // ============================================================
 export const authGuard: CanActivateFn = async () => {
-  const authService = inject(Auth);
+  const auth = inject(Auth);
   const router = inject(Router);
 
-  const session = await authService.getProfile();
-
-  if (!session) {
+  if (!auth.isLoggedIn()) {
     router.navigate(['/login']);
     return false;
   }
@@ -24,17 +22,14 @@ export const authGuard: CanActivateFn = async () => {
 // ============================================================
 // publicGuard
 // Protege rutas públicas (login, register)
-// Si el usuario ya está autenticado lo redirige a /home
-// Uso: canActivate: [publicGuard]
+// Si ya hay sesión activa → redirige a /home
 // ============================================================
 export const publicGuard: CanActivateFn = async () => {
-  const authService = inject(Auth);
+  const auth = inject(Auth);
   const router = inject(Router);
 
-  const session = await authService.getProfile();
-
-  if (session) {
-    router.navigate(['/home']);
+  if (auth.isLoggedIn()) {
+    router.navigate(['']);
     return false;
   }
 
@@ -43,26 +38,36 @@ export const publicGuard: CanActivateFn = async () => {
 
 // ============================================================
 // adminGuard
-// Protege rutas de administración (rol debe ser 'admin')
-// Si no está autenticado → /login
-// Si está autenticado pero no es admin → /home
-// Uso: canActivate: [adminGuard]
+// Protege rutas de administración — rol debe ser 'admin'
+// Sin token       → redirige a /login
+// Sin rol admin   → redirige a /home
+//
+// Usa waitForUser() porque el constructor del AuthService
+// carga el perfil de forma asíncrona: si se navega directamente
+// a /admin/* al refrescar la página, el rol puede no estar
+// disponible aún en el userSubject.
 // ============================================================
 export const adminGuard: CanActivateFn = async () => {
-  const authService = inject(Auth);
+  const auth = inject(Auth);
   const router = inject(Router);
 
-  const session = await authService.getProfile();
-
-  if (!session) {
+  if (!auth.isLoggedIn()) {
     router.navigate(['/login']);
     return false;
   }
 
-  const role = session.user.user_metadata?.['role'];
+  // Esperamos a que el perfil esté completamente cargado
+  const user = await auth.waitForUser();
+
+  if (!user) {
+    router.navigate(['/login']);
+    return false;
+  }
+
+  const role = user.role ?? user.user_metadata?.role ?? null;
 
   if (role !== 'admin') {
-    router.navigate(['/home']);
+    router.navigate(['']);
     return false;
   }
 
