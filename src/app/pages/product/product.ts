@@ -3,6 +3,7 @@ import { DecimalPipe } from '@angular/common';
 import { SizeButton } from './components/size-button/size-button';
 import { ProductsService } from '../../services/products.service';
 import { CartService } from '../../services/cart.service';
+import { Auth } from '../../services/auth';
 
 @Component({
   selector: 'app-product',
@@ -13,6 +14,7 @@ import { CartService } from '../../services/cart.service';
 export class Product {
   private productsService = inject(ProductsService);
   private cartService = inject(CartService);
+  private authService = inject(Auth);
 
   slug = input.required<string>();
 
@@ -48,6 +50,16 @@ export class Product {
   }
 
   handleAddToCart() {
+    if (!this.authService.isLoggedIn()) {
+      alert('Debes iniciar sesión para añadir productos al carrito.');
+      return;
+    }
+
+    if (this.authService.getRole() !== 'user') {
+      alert('Solo los clientes pueden realizar compras.');
+      return;
+    }
+
     const size = this.selectedSize();
     const product = this.data();
 

@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { authGuard } from './guards/auth-guard';
+import { authGuard, userGuard } from './guards/auth-guard';
 import { publicGuard } from './guards/auth-guard';
 import { adminGuard } from './guards/auth-guard';
 
@@ -30,12 +30,12 @@ export const routes: Routes = [
   {
     path: 'cart',
     loadComponent: () => import('./pages/cart/cart').then(m => m.Cart),
-    canActivate: [authGuard],
+    canActivate: [userGuard],
   },
   {
     path: 'orders',
     loadComponent: () => import('./pages/orders/orders').then(m => m.Orders),
-    canActivate: [authGuard],
+    canActivate: [userGuard],
   },
   {
     path: 'admin/products',

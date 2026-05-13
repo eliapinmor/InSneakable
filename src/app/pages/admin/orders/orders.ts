@@ -2,11 +2,12 @@ import { Component, inject, signal } from '@angular/core';
 import { OrdersService } from '../../../services/orders.service';
 import { FormsModule } from '@angular/forms';
 import { OrderRow } from './components/order-row/order-row';
+import { DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'app-admin-orders',
   standalone: true,
-  imports: [FormsModule, OrderRow],
+  imports: [FormsModule, OrderRow, DecimalPipe],
   templateUrl: './orders.html',
   styleUrl: './orders.css',
 })

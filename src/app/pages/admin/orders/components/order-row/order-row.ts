@@ -3,20 +3,20 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-order-row',
+  selector: 'tr[app-order-row]', // Esto es clave para que no se descuadre
+  standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './order-row.html',
-  styleUrl: './order-row.css',
 })
 export class OrderRow {
   order = input.required<any>();
   statusOptions = input.required<string[]>();
+  
   statusChange = output<{ orderId: string; status: string }>();
+  toggle = output<void>();
 
-  isExpanded = false;
-
-  toggleItems(): void {
-    this.isExpanded = !this.isExpanded;
+  onToggle() {
+    this.toggle.emit();
   }
 
   onStatusChange(orderId: string, status: string): void {

@@ -1,32 +1,75 @@
-<div class="p-8">
-  <h1 class="text-3xl font-bold mb-6">Gestión de Pedidos (Admin)</h1>
+<div class="p-8 max-w-7xl mx-auto">
+  <div class="flex justify-between items-center mb-8">
+    <div>
+      <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">Gestión de Pedidos</h1>
+    </div>
+    <span class="bg-black text-white px-4 py-2 rounded-full text-sm font-bold">
+      {{ orders().length }} Pedidos totales
+    </span>
+  </div>
 
-  <div class="overflow-x-auto bg-white rounded-xl shadow-md border">
-    <table class="w-full text-left border-collapse">
-      <thead>
-        <tr class="bg-gray-100 text-gray-600 uppercase text-xs">
-          <th class="p-4 border-b">ID Pedido / Fecha</th>
-          <th class="p-4 border-b">Usuario</th>
-          <th class="p-4 border-b">Productos</th>
-          <th class="p-4 border-b">Total</th>
-          <th class="p-4 border-b">Estado</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (order of orders(); track order.id) {
-          <app-order-row
-            [order]="order"
-            [statusOptions]="statusOptions"
-            (statusChange)="changeStatus($event.orderId, $event.status)"
-          />
-        } @empty {
-          <tr>
-            <td colspan="5" class="p-10 text-center text-gray-500 italic">
-              No hay pedidos en el sistema.
-            </td>
+  <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-separate border-spacing-0">
+        <thead>
+          <tr class="bg-gray-50/50">
+            <th class="p-5 border-b text-xs font-bold uppercase text-gray-500">ID / Fecha</th>
+            <th class="p-5 border-b text-xs font-bold uppercase text-gray-500">Cliente</th>
+            <th class="p-5 border-b text-xs font-bold uppercase text-gray-500">Contenido</th>
+            <th class="p-5 border-b text-xs font-bold uppercase text-gray-500">Total</th>
+            <th class="p-5 border-b text-xs font-bold uppercase text-gray-500 text-right">Estado</th>
           </tr>
-        }
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          @for (order of orders(); track order.id) {
+            <tr app-order-row
+              [order]="order"
+              [statusOptions]="statusOptions"
+              (statusChange)="changeStatus($event.orderId, $event.status)"
+              (toggle)="order.expanded = !order.expanded"
+              class="hover:bg-gray-50/50 transition-colors"
+            ></tr>
+
+            @if (order.expanded) {
+              <tr>
+                <td colspan="5" class="p-0 bg-gray-50/30">
+                  <div class="px-12 py-6 bg-white border-x border-gray-100 shadow-inner">
+                    <h4 class="text-[10px] font-black uppercase text-gray-400 mb-4 tracking-widest text-center">Detalle del pedido</h4>
+                    <div class="rounded-xl border border-gray-200 overflow-hidden bg-white">
+                      <table class="w-full text-sm">
+                        <thead class="bg-gray-50 text-gray-500 text-[10px] uppercase font-bold">
+                          <tr>
+                            <th class="px-6 py-3 text-left">Producto</th>
+                            <th class="px-6 py-3 text-center">Talla</th>
+                            <th class="px-6 py-3 text-center">Cant.</th>
+                            <th class="px-6 py-3 text-right">Precio</th>
+                          </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                          @for (item of order.order_items; track item.id) {
+                            <tr>
+                              <td class="px-6 py-3 font-medium text-gray-800">{{ item.products?.name }}</td>
+                              <td class="px-6 py-3 text-center">
+                                <span class="bg-gray-100 px-2 py-0.5 rounded text-[11px] font-bold">{{ item.size }}</span>
+                              </td>
+                              <td class="px-6 py-3 text-center text-gray-500 text-xs">x{{ item.quantity }}</td>
+                              <td class="px-6 py-3 text-right font-bold text-xs">{{ item.unit_price | number:'1.2-2' }}€</td>
+                            </tr>
+                          }
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            }
+          } @empty {
+            <tr>
+              <td colspan="5" class="p-20 text-center text-gray-400 italic">No hay pedidos.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
