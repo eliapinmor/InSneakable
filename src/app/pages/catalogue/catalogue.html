@@ -1,16 +1,48 @@
-<div class="flex gap-6">
-  <div class="bg-gray-200 w-1/4">
-    <div>1</div> <!-- search bar placeholders -->
-    <div></div>
-  </div>
+<div class="flex gap-6 px-6 py-4">
 
-  <div class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4  w-3/4">
-    @for (item of products(); track item.id) {
-      <app-product-card [data]="item" />
-    } @empty {
-      <div class="col-span-full flex flex-col items-center py-20">
-        <p class="text-slate-500 italic">No hay productos que mostrar.</p>
-      </div>
-    }
+  <aside class="w-1/4 flex flex-col gap-4 self-start sticky top-4">
+
+    <div class="flex flex-col gap-2">
+      <label class="text-sm font-semibold text-gray-700 uppercase tracking-wide">Buscar</label>
+      <app-catalogue-search
+        [searchQuery]="searchQuery()"
+        (searchChange)="onSearchChange($event)"
+      />
+    </div>
+
+    <app-catalogue-filters
+      [categories]="categories()"
+      [filters]="filters()"
+      (filtersChange)="onFiltersChange($event)"
+      (resetFilters)="onResetFilters()"
+    />
+
+  </aside>
+
+  <div class="w-3/4 flex flex-col gap-4">
+
+    <p class="text-sm text-gray-500">
+      {{ products().length }}
+      {{ products().length === 1 ? 'producto encontrado' : 'productos encontrados' }}
+    </p>
+
+    <div class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      @for (item of products(); track item.id) {
+        <app-product-card [data]="item" />
+      } @empty {
+        <div class="col-span-full flex flex-col items-center py-20 gap-3">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-300" fill="none"
+            viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+              d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
+          </svg>
+          <p class="text-gray-400 italic">No se encontraron productos con estos filtros.</p>
+          <button (click)="onResetFilters()" class="text-sm font-semibold text-black underline">
+            Limpiar filtros
+          </button>
+        </div>
+      }
+    </div>
+
   </div>
 </div>

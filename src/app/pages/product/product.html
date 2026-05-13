@@ -1,55 +1,88 @@
 <div class="flex px-24 gap-4">
+
+  <!-- Imagen -->
   <div class="w-3/7 items-center flex justify-center">
-    <img [src]="data().image_url" />
+    <img [src]="data().image_url" [alt]="data().name" class="rounded-xl object-cover" />
   </div>
+
+  <!-- Info -->
   <div class="w-4/7 flex flex-col gap-6">
     <p class="text-5xl font-semibold">{{ data().name }}</p>
-    <p class="text-2xl font-regular">{{ data().description }}</p>
-    <p class="text-4xl font-semibold">{{ data().price }}€</p>
-    <p>Talla</p>
-    <div class="flex gap-4">
-      @for (size of data().sizes; track size) {
-        <app-size-button
-          [data]="size"
-          [isSelected]="selectedSize() === size"
-          (click)="selectSize(size)"
-        >
-        </app-size-button>
-      } @empty {
-        <p class="text-sm text-gray-500">No hay tallas disponibles para este producto.</p>
-      }
-    </div>
-    <div>
-      <!-- cantidad -->
-      <div class="mt-10">
-        <button
-          (click)="handleAddToCart()"
-          class="w-full flex items-center justify-center rounded-xl bg-black px-8 py-4 text-base font-bold text-white transition-all hover:bg-gray-800 active:scale-95 disabled:bg-gray-400"
-          [disabled]="!selectedSize()"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="mr-2 h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
-            />
-          </svg>
-          Añadir al carrito
-        </button>
+    <p class="text-2xl font-regular text-gray-600">{{ data().description }}</p>
+    <p class="text-4xl font-semibold">{{ data().price | number:'1.2-2' }}€</p>
 
-        @if (!selectedSize()) {
-          <p class="mt-2 text-center text-sm text-red-500 font-medium">
-            Selecciona una talla para continuar
-          </p>
+    <!-- Tallas -->
+    <div class="flex flex-col gap-2">
+      <p class="font-medium text-gray-700">Talla</p>
+      <div class="flex gap-3 flex-wrap">
+        @for (size of data().sizes; track size) {
+          <app-size-button
+            [data]="size"
+            [isSelected]="selectedSize() === size"
+            (click)="selectSize(size)"
+          />
+        } @empty {
+          <p class="text-sm text-gray-500">No hay tallas disponibles para este producto.</p>
         }
       </div>
+      @if (submitAttempted() && !selectedSize()) {
+        <p class="text-xs text-red-500 font-medium">Selecciona una talla para continuar.</p>
+      }
     </div>
+
+    <!-- Cantidad -->
+    <div class="flex flex-col gap-2">
+      <p class="font-medium text-gray-700">Cantidad</p>
+      <div class="flex items-center gap-3">
+        <button
+          (click)="decreaseQuantity()"
+          [disabled]="quantity() <= 1"
+          class="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-300 text-lg font-bold transition-colors hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40"
+        >
+          -
+        </button>
+
+        <span class="w-8 text-center text-lg font-semibold">{{ quantity() }}</span>
+
+        <button
+          (click)="increaseQuantity()"
+          [disabled]="quantity() >= data().stock"
+          class="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-300 text-lg font-bold transition-colors hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40"
+        >
+          +
+        </button>
+
+        <span class="text-sm text-gray-400">({{ data().stock }} disponibles)</span>
+      </div>
+    </div>
+
+    <!-- Añadir al carrito -->
+    <div class="mt-4">
+      <button
+        (click)="handleAddToCart()"
+        class="w-full flex items-center justify-center rounded-xl px-8 py-4 text-base font-bold text-white transition-all active:scale-95"
+        [class.bg-black]="selectedSize()"
+        [class.hover:bg-gray-800]="selectedSize()"
+        [class.bg-gray-400]="!selectedSize()"
+        [class.cursor-not-allowed]="!selectedSize()"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="mr-2 h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+          />
+        </svg>
+        Añadir al carrito
+      </button>
+    </div>
+
   </div>
 </div>
