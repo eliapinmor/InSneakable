@@ -8,5 +8,5 @@ export interface CartItem {
   size: string;
   quantity: number;
   unit_price: number;
-  subtotal: number;           // quantity * unit_price (calculado en cliente)
+  subtotal: number;
 }

@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, tap } from 'rxjs';
+import { CartService } from './cart.service';
 
 @Injectable({
   providedIn: 'root',
@@ -10,6 +11,8 @@ export class Auth {
 
   private userSubject = new BehaviorSubject<any>(null);
   user$ = this.userSubject.asObservable();
+
+  private cartService = inject(CartService);
 
   constructor(private http: HttpClient) {
     const token = this.getToken();
@@ -52,6 +55,10 @@ export class Auth {
   logout() {
     localStorage.removeItem('token');
     this.userSubject.next(null);
+
+    this.cartService.clearCart();
+
+    console.log('Sesión y carrito cerrados');
   }
 
   getToken(): string | null {
@@ -69,7 +76,7 @@ export class Auth {
     return user.role ?? user.user_metadata?.role ?? null;
   }
 
-   waitForUser(): Promise<any> {
+  waitForUser(): Promise<any> {
     return new Promise((resolve) => {
       const current = this.userSubject.getValue();
       if (current && !current.loading) {
